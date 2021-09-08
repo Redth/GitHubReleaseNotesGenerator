@@ -1,0 +1,69 @@
+{
+	"repositoryName": "maui",
+	"repositoryLocalPath": "/Users/redth/code/maui",
+	"repositoryOwner": "dotnet",
+	"fromCommit": "",
+	"toCommit": "",
+	"areas": [
+		{
+			"label": "area/a11y",
+			"owners": [
+				"rachelkang", "PureWeen"
+			] 
+		}
+	],
+	"contributors": [
+		{
+			"team": "MAUI",
+			"user": "redth"
+		},
+		{
+			"team": "MAUI",
+			"user": "PureWeen"
+		},
+		{
+			"team": "MAUI",
+			"user": "rachelkang"
+		},
+		{
+			"team": "MAUI",
+			"user": "mattleibow"
+		},
+		{
+			"team": "MAUI",
+			"user": "rmarinho"
+		},
+		{
+			"team": "MAUI",
+			"user": "jsuarezruiz"
+		},
+		{
+			"team": "MAUI",
+			"user": "davidortinau"
+		},
+		{
+			"team": "MAUI",
+			"user": "hartez"
+		},
+		{
+			"team": "MAUI",
+			"user": "redth"
+		},
+		{
+			"team": "Blazor",
+			"user": "Eilon"
+		},
+		{
+			"team": "Blazor",
+			"user": "SteveSandersonMS"
+		},
+		{
+			"team": "Blazor",
+			"user": "javiercn"
+		},
+		{
+			"team": "XET",
+			"user": "chabiss"
+		}
+	]
+}

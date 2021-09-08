@@ -1,0 +1,53 @@
+{
+	"repositoryName": "Xamarin.Forms",
+	"repositoryLocalPath": "/Users/redth/code/Xamarin.Forms",
+	"repositoryOwner": "xamarin",
+	"fromCommit": "ec1520e32439f9cb2929883bacf3db138165bbb3",
+	"toCommit": "e9e97e2a240d",
+	"areas": [
+		{
+			"label": "area/a11y",
+			"owners": [
+				"rachelkang", "PureWeen"
+			] 
+		}
+	],
+	"contributors": [
+		{
+			"team": "XF",
+			"user": "redth"
+		},
+		{
+			"team": "XF",
+			"user": "PureWeen"
+		},
+		{
+			"team": "XF",
+			"user": "rachelkang"
+		},
+		{
+			"team": "XF",
+			"user": "mattleibow"
+		},
+		{
+			"team": "XF",
+			"user": "rmarinho"
+		},
+		{
+			"team": "XF",
+			"user": "jsuarezruiz"
+		},
+		{
+			"team": "XF",
+			"user": "davidortinau"
+		},
+		{
+			"team": "XF",
+			"user": "hartez"
+		},
+		{
+			"team": "XF",
+			"user": "redth"
+		}
+	]
+}
