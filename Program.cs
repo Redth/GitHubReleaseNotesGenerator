@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Mono.ApiTools;
 
 namespace GitHubReleaseNotesGenerator
 {
@@ -67,6 +68,34 @@ namespace GitHubReleaseNotesGenerator
 			}
 
 			File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "notes.md"), notes.ToString());
+
+
+			// Diff nupkg's
+			foreach (var artifact in config.ArtifactDiffs)
+			{
+				var id = string.Empty;
+
+				using (var r = new NuGet.Packaging.PackageArchiveReader(artifact.FromNupkg))
+					id = r.GetIdentity().Id;
+
+				var diffDir = Path.Combine(AppContext.BaseDirectory, "api-diff", id);
+				Directory.CreateDirectory(diffDir);
+
+				// create the comparer
+				var comparer = new NuGetDiff();
+
+				// set any properties, in this case ignore errors as this is not essential
+				comparer.IgnoreResolutionErrors = true;
+				comparer.SaveAssemblyMarkdownDiff = true;
+				comparer.SaveAssemblyApiInfo = true;
+				comparer.SaveNuGetXmlDiff = true;
+
+				using (var oldPkg = new NuGet.Packaging.PackageArchiveReader(artifact.FromNupkg))
+				using (var newPkg = new NuGet.Packaging.PackageArchiveReader(artifact.ToNupkg))
+				{
+					await comparer.SaveCompleteDiffToDirectoryAsync(oldPkg, newPkg, diffDir);
+				}
+			}
 		}
 	}
 }

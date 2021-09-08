@@ -4,6 +4,15 @@ using Newtonsoft.Json;
 
 namespace GitHubReleaseNotesGenerator
 {
+	public class ArtifactDiff
+	{
+		[JsonProperty("fromNupkg")]
+		public string FromNupkg { get; set; }
+
+		[JsonProperty("toNupkg")]
+		public string ToNupkg { get; set; }
+	}
+
 	public class Config
 	{
 		[JsonProperty("repositoryLocalPath")]
@@ -26,6 +35,9 @@ namespace GitHubReleaseNotesGenerator
 
 		[JsonProperty("contributors")]
 		public Contributor[] Contributors { get; set; }
+
+		[JsonProperty("artifactDiffs")]
+		public ArtifactDiff[] ArtifactDiffs { get; set; }
 
 		public Dictionary<string, List<Contributor>> GetTeams()
 		{

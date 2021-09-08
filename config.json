@@ -4,12 +4,20 @@
 	"repositoryOwner": "xamarin",
 	"fromCommit": "ec1520e32439f9cb2929883bacf3db138165bbb3",
 	"toCommit": "e9e97e2a240d",
+	"artifactDiffs": [
+
+		{
+			"fromNupkg": "/Users/redth/Downloads/xamarin.forms.5.0.0.2083.nupkg",
+			"toNupkg": "/Users/redth/Downloads/xamarin.forms.5.0.0.2108.nupkg"
+		}
+	],
 	"areas": [
 		{
 			"label": "area/a11y",
 			"owners": [
-				"rachelkang", "PureWeen"
-			] 
+				"rachelkang",
+				"PureWeen"
+			]
 		}
 	],
 	"contributors": [
