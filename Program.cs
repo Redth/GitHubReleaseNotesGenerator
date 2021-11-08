@@ -12,7 +12,7 @@ namespace GitHubReleaseNotesGenerator
 	{
 		static async Task Main(string[] args)
 		{
-			var configFile = Path.Combine(AppContext.BaseDirectory, "config.json");
+			var configFile = Path.Combine(AppContext.BaseDirectory, "maui.config.json");
 			var configData = File.ReadAllText(configFile);
 			var config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(configData);
 
@@ -69,31 +69,34 @@ namespace GitHubReleaseNotesGenerator
 
 			File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "notes.md"), notes.ToString());
 
-
-			// Diff nupkg's
-			foreach (var artifact in config.ArtifactDiffs)
+			if (config.ArtifactDiffs != null && config.ArtifactDiffs.Any())
 			{
-				var id = string.Empty;
 
-				using (var r = new NuGet.Packaging.PackageArchiveReader(artifact.FromNupkg))
-					id = r.GetIdentity().Id;
-
-				var diffDir = Path.Combine(AppContext.BaseDirectory, "api-diff", id);
-				Directory.CreateDirectory(diffDir);
-
-				// create the comparer
-				var comparer = new NuGetDiff();
-
-				// set any properties, in this case ignore errors as this is not essential
-				comparer.IgnoreResolutionErrors = true;
-				comparer.SaveAssemblyMarkdownDiff = true;
-				comparer.SaveAssemblyApiInfo = true;
-				comparer.SaveNuGetXmlDiff = true;
-
-				using (var oldPkg = new NuGet.Packaging.PackageArchiveReader(artifact.FromNupkg))
-				using (var newPkg = new NuGet.Packaging.PackageArchiveReader(artifact.ToNupkg))
+				// Diff nupkg's
+				foreach (var artifact in config.ArtifactDiffs)
 				{
-					await comparer.SaveCompleteDiffToDirectoryAsync(oldPkg, newPkg, diffDir);
+					var id = string.Empty;
+
+					using (var r = new NuGet.Packaging.PackageArchiveReader(artifact.FromNupkg))
+						id = r.GetIdentity().Id;
+
+					var diffDir = Path.Combine(AppContext.BaseDirectory, "api-diff", id);
+					Directory.CreateDirectory(diffDir);
+
+					// create the comparer
+					var comparer = new NuGetDiff();
+
+					// set any properties, in this case ignore errors as this is not essential
+					comparer.IgnoreResolutionErrors = true;
+					comparer.SaveAssemblyMarkdownDiff = true;
+					comparer.SaveAssemblyApiInfo = true;
+					comparer.SaveNuGetXmlDiff = true;
+
+					using (var oldPkg = new NuGet.Packaging.PackageArchiveReader(artifact.FromNupkg))
+					using (var newPkg = new NuGet.Packaging.PackageArchiveReader(artifact.ToNupkg))
+					{
+						await comparer.SaveCompleteDiffToDirectoryAsync(oldPkg, newPkg, diffDir);
+					}
 				}
 			}
 		}

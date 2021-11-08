@@ -1,9 +1,9 @@
 {
 	"repositoryName": "maui",
-	"repositoryLocalPath": "/Users/redth/code/maui",
+	"repositoryLocalPath": "C:\\code\\maui",
 	"repositoryOwner": "dotnet",
-	"fromCommit": "",
-	"toCommit": "",
+	"fromCommit": "cdb68cd",
+	"toCommit": "d047f96",
 	"areas": [
 		{
 			"label": "area/a11y",
