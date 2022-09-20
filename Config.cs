@@ -39,6 +39,12 @@ namespace GitHubReleaseNotesGenerator
 		[JsonProperty("artifactDiffs")]
 		public ArtifactDiff[] ArtifactDiffs { get; set; }
 
+		[JsonProperty("includeMaestroBumps")]
+		public bool IncludeMaestroBumps { get; set; }
+
+		[JsonProperty("skipPRTitlePatterns")]
+		public List<string> SkipPRTitlePatterns { get; set; } = new();
+
 		public Dictionary<string, List<Contributor>> GetTeams()
 		{
 			var results = new Dictionary<string, List<Contributor>>();

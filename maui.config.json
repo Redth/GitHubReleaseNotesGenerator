@@ -2,15 +2,19 @@
 	"repositoryName": "maui",
 	"repositoryLocalPath": "C:\\code\\maui",
 	"repositoryOwner": "dotnet",
-	"fromCommit": "cdb68cd",
-	"toCommit": "d047f96",
+	"fromCommit": "e1fd215f1dd9627e9a22002375e3852fffa9441e",
+	"toCommit": "15597beacb75ff5f9b2dfced7b3e6842ae95b4e0",
 	"areas": [
 		{
 			"label": "area/a11y",
 			"owners": [
-				"rachelkang", "PureWeen"
-			] 
+				"rachelkang",
+				"PureWeen"
+			]
 		}
+	],
+	"skipPRTitlePatterns": [
+		"Automated PR to fix formatting errors"
 	],
 	"contributors": [
 		{

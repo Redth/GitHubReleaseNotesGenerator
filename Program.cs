@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Mono.ApiTools;
+using Octokit;
 
 namespace GitHubReleaseNotesGenerator
 {
@@ -29,6 +30,10 @@ namespace GitHubReleaseNotesGenerator
 
 			var notes = new System.Text.StringBuilder();
 
+			var changeNotes = new System.Text.StringBuilder();
+			var dependancyNotes = new System.Text.StringBuilder();
+			var maestroNotes = new System.Text.StringBuilder();
+
 			var github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("dotnet-gh-releasenotes-generator"));
 			github.Credentials = new Octokit.Credentials(token);
 
@@ -46,26 +51,80 @@ namespace GitHubReleaseNotesGenerator
 
 					if (int.TryParse(prMatch?.Groups?["pr"]?.Value ?? string.Empty, out var prNumber) && prNumber > 0)
 					{
-						var pr = await github.Repository.PullRequest.Get(owner, repo, prNumber);
+						PullRequest pr = null;
+
+						try
+						{
+							pr = await github.Repository.PullRequest.Get(owner, repo, prNumber);
+						} catch { }
+
+						string authorName;
+						string msg;
+						bool skipped = false;
 
 						if (pr != null)
 						{
-							var authorName = pr.User.Login ?? pr.User.Email;
-							var str = $" - {pr.Title} - [#{pr.Number}]({pr.HtmlUrl}) ([@{authorName}]({pr.User.HtmlUrl}))";
-							notes.AppendLine(str);
-							Console.WriteLine(str);
+							authorName = pr.User.Login ?? pr.User.Email;
+							msg = $" * {pr.Title} - [#{pr.Number}]({pr.HtmlUrl}) ([@{authorName}]({pr.User.HtmlUrl}))";
+						}
+						else
+						{
+							authorName = c.Author.Name ?? c.Committer.Name ?? string.Empty;
+							if (!string.IsNullOrEmpty(authorName))
+								authorName = "@" + authorName;
+
+							msg = $" * {c.MessageShort} - {c.Sha} ({authorName})";
 						}
 
-						var labels = pr.Labels.Select(l => l.Name).ToArray();
+						if (config.SkipPRTitlePatterns.Any(p => msg.Contains(p)))
+							skipped = true;
 
-						var areas = config.GetAreas(labels);
+						if (!string.IsNullOrEmpty(msg) && !skipped)
+						{
+							var isMaestro = authorName.StartsWith("dotnet-maestro");
+							var isDependabot = authorName.StartsWith("dependabot");
 
-						var contributors = config.GetContributors(areas?.ToArray());
+							if (isMaestro && config.IncludeMaestroBumps)
+								maestroNotes.AppendLine(msg);
 
+							if (isDependabot)
+								dependancyNotes.AppendLine(msg);
+
+							if (!isMaestro && !isDependabot)
+								changeNotes.AppendLine(msg);
+
+							Console.WriteLine(msg);
+						}
+
+						//var labels = pr.Labels.Select(l => l.Name).ToArray();
+
+						//var areas = config.GetAreas(labels);
+
+						//var contributors = config.GetContributors(areas?.ToArray());
 						// TODO: Organize or pretty print based on grouping things by area and/or contributor/team
 					}
 				}
 			}
+
+
+			notes.AppendLine("## What's Changed");
+			notes.AppendLine(changeNotes.ToString());
+
+			notes.AppendLine("## Dependency Updates");
+			notes.AppendLine(dependancyNotes.ToString());
+
+
+			if (config.IncludeMaestroBumps)
+			{
+				notes.AppendLine("## DotNet Maestro Updates");
+				notes.AppendLine(maestroNotes.ToString());
+			}
+
+			notes.AppendLine();
+
+			var changesLink = $"https://github.com/{owner}/{repo}/compare/{fromCommit}...{toCommit}";
+
+			notes.AppendLine("**Full Changelog:** " + changesLink);
 
 			File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "notes.md"), notes.ToString());
 
