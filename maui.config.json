@@ -2,8 +2,8 @@
 	"repositoryName": "maui",
 	"repositoryLocalPath": "C:\\code\\maui",
 	"repositoryOwner": "dotnet",
-	"fromCommit": "e1fd215f1dd9627e9a22002375e3852fffa9441e",
-	"toCommit": "15597beacb75ff5f9b2dfced7b3e6842ae95b4e0",
+	"fromCommit": "9da51647228ce7af3347552d2ea07404f69db071",
+	"toCommit": "8a460d0740220796dbb71ce10c70fb35a7f8e4ee",
 	"areas": [
 		{
 			"label": "area/a11y",
