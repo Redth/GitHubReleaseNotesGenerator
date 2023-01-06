@@ -37,6 +37,8 @@ namespace GitHubReleaseNotesGenerator
 			var github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("dotnet-gh-releasenotes-generator"));
 			github.Credentials = new Octokit.Credentials(token);
 
+			var processedPrs = new List<int>();
+
 			using (var localRepo = new LibGit2Sharp.Repository(repoPath))
 			{
 				var filter = new LibGit2Sharp.CommitFilter
@@ -79,7 +81,7 @@ namespace GitHubReleaseNotesGenerator
 						if (config.SkipPRTitlePatterns.Any(p => msg.Contains(p)))
 							skipped = true;
 
-						if (!string.IsNullOrEmpty(msg) && !skipped)
+						if (!string.IsNullOrEmpty(msg) && !skipped && !processedPrs.Contains(pr.Number))
 						{
 							var isMaestro = authorName.StartsWith("dotnet-maestro");
 							var isDependabot = authorName.StartsWith("dependabot");
@@ -92,6 +94,8 @@ namespace GitHubReleaseNotesGenerator
 
 							if (!isMaestro && !isDependabot)
 								changeNotes.AppendLine(msg);
+
+							processedPrs.Add(pr.Number);
 
 							Console.WriteLine(msg);
 						}
