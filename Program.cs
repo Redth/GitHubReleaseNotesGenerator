@@ -81,7 +81,7 @@ namespace GitHubReleaseNotesGenerator
 						if (config.SkipPRTitlePatterns.Any(p => msg.Contains(p)))
 							skipped = true;
 
-						if (!string.IsNullOrEmpty(msg) && !skipped && !processedPrs.Contains(pr.Number))
+						if (!string.IsNullOrEmpty(msg) && !skipped && (pr is not null && !processedPrs.Contains(pr.Number)))
 						{
 							var isMaestro = authorName.StartsWith("dotnet-maestro");
 							var isDependabot = authorName.StartsWith("dependabot");
